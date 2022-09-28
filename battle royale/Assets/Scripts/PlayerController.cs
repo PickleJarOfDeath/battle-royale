@@ -1,29 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPun
 {
+    [Header("Info")]
+    public int id;
+    private int curAttackerId;
+
     [Header("Stats")]
     public float moveSpeed;
     public float jumpForce;
+    public int curHP;
+    public int maxHP;
+    public int kills;
+    public bool dead;
+
+    private bool flashingDamage;
 
     [Header("Components")]
     public Rigidbody rig;
+    public Player photonPlayer;
+    public PlayerWeapon weapon;
+    public MeshRenderer mr;
 
-    // Start is called before the first frame update
-    void Start()
+
+    [PunRPC]
+    public void Initialize(Player player)
     {
-        
+        id = player.ActorNumber;
+        photonPlayer = player;
+
+        GameManager.instance.players[id - 1] = this;
+
+        if (!photonView.IsMine)
+        {
+            GetComponentInChildren<Camera>().gameObject.SetActive(false);
+            rig.isKinematic = true;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine || dead)
+            return;
+
         Move();
 
         if (Input.GetKeyDown(KeyCode.Space))
             TryJump();
+
+        if (Input.GetMouseButtonDown(0))
+            weapon.TryShoot();
     }
 
     void Move()
@@ -45,5 +76,48 @@ public class PlayerController : MonoBehaviour
         {
             rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+    }
+
+    public void TakeDamage(int attackerId, int damage)
+    {
+        if (dead)
+        {
+            return;
+        }
+
+        curHP -= damage;
+        curAttackerId = attackerId;
+
+        photonView.RPC("DamageFlash", RpcTarget.Others);
+
+        if (curHP <= 0)
+            photonView.RPC("Die", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void DamageFlash()
+    {
+        if (flashingDamage)
+            return;
+
+        StartCoroutine(DamageFlashCoRoutine());
+
+        IEnumerator DamageFlashCoRoutine()
+        {
+            flashingDamage = true;
+
+            Color defaultColor = mr.material.color;
+            mr.material.color = Color.red;
+
+            yield return new WaitForSeconds(0.05f);
+
+            mr.material.color = defaultColor;
+            flashingDamage = false;
+        }
+    }
+
+    void Die()
+    {
+
     }
 }
