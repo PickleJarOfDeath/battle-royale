@@ -9,12 +9,14 @@ using Photon.Realtime;
 public class Menu : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
     [Header("Screens")]
+    public GameObject titleScreen;
     public GameObject mainScreen;
     public GameObject createRoomScreen;
     public GameObject lobbyScreen;
     public GameObject lobbyBrowserScreen;
 
     [Header("Main Screen")]
+    public Button TitleScreenButton;
     public Button createRoomButton;
     public Button findRoomButton;
 
@@ -47,6 +49,7 @@ public class Menu : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     void SetScreen(GameObject screen)
     {
+        titleScreen.SetActive(false);
         mainScreen.SetActive(false);
         createRoomScreen.SetActive(false);
         lobbyScreen.SetActive(false);
@@ -56,6 +59,11 @@ public class Menu : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
         if (screen == lobbyBrowserScreen)
             UpdateLobbyBrowserUI();
+    }
+
+    public void OnTitleScreenButton()
+    {
+        SetScreen(mainScreen);
     }
 
     public void OnBackButton()
