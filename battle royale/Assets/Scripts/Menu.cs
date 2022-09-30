@@ -42,6 +42,9 @@ public class Menu : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
         if (PhotonNetwork.InRoom)
         {
+            SetScreen(lobbyScreen);
+            UpdateLobbyUI();
+
             PhotonNetwork.CurrentRoom.IsVisible = true;
             PhotonNetwork.CurrentRoom.IsOpen = true;
         }
@@ -178,11 +181,5 @@ public class Menu : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> allRooms)
     {
         roomList = allRooms;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

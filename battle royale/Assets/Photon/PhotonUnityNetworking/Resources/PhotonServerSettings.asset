@@ -43,6 +43,10 @@ MonoBehaviour:
   - Initialize
   - DamageFlash
   - SpawnBullet
+  - AddKill
+  - WinGame
+  - GiveAmmo
+  - Heal
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

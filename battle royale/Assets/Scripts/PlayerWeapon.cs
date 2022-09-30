@@ -33,6 +33,8 @@ public class PlayerWeapon : MonoBehaviour
         curAmmo--;
         lastShootTime = Time.time;
 
+        GameUI.instance.UpdateAmmoText();
+
         player.photonView.RPC("SpawnBullet", RpcTarget.All, bulletSpawnPos.position, Camera.main.transform.forward);
     }
 
@@ -42,18 +44,17 @@ public class PlayerWeapon : MonoBehaviour
         GameObject bulletObj = Instantiate(bulletPrefab, pos, Quaternion.identity);
         bulletObj.transform.forward = dir;
 
+        Bullet bulletScript = bulletObj.GetComponent<Bullet>();
 
+        bulletScript.Initialize(damage, player.id, player.photonView.IsMine);
+        bulletScript.rig.velocity = dir * bulletSpeed;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    [PunRPC]
+    public void GiveAmmo(int ammoToGive)
     {
-        
-    }
+        curAmmo = Mathf.Clamp(curAmmo + ammoToGive, 0, maxAmmo);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GameUI.instance.UpdateAmmoText();
     }
 }

@@ -40,6 +40,10 @@ public class PlayerController : MonoBehaviourPun
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
             rig.isKinematic = true;
         }
+        else
+        {
+            GameUI.instance.Initialize(this);
+        }
     }
 
     // Update is called once per frame
@@ -90,6 +94,8 @@ public class PlayerController : MonoBehaviourPun
 
         photonView.RPC("DamageFlash", RpcTarget.Others);
 
+        GameUI.instance.UpdateHealthBar();
+
         if (curHP <= 0)
             photonView.RPC("Die", RpcTarget.All);
     }
@@ -118,6 +124,39 @@ public class PlayerController : MonoBehaviourPun
 
     void Die()
     {
+        curHP = 0;
+        dead = true;
 
+        GameManager.instance.alivePlayers--;
+
+        if (PhotonNetwork.IsMasterClient)
+            GameManager.instance.CheckWinCondition();
+
+        if (photonView.IsMine)
+        {
+            if (curAttackerId != 0)
+                GameManager.instance.GetPlayer(curAttackerId).photonView.RPC("AddLikk", RpcTarget.All);
+
+            GetComponentInChildren<CameraController>().SetAsSpectator();
+
+            rig.isKinematic = true;
+            transform.position = new Vector3(0, -50, 0);
+        }
+    }
+
+    [PunRPC]
+    public void AddKill()
+    {
+        kills++;
+
+        GameUI.instance.UpdatePlayerInfoText();
+    }
+
+    [PunRPC]
+    public void Heal(int amountToHeal)
+    {
+        curHP += Mathf.Clamp( curHP + amountToHeal, 0, maxHP);
+
+        GameUI.instance.UpdateHealthBar();
     }
 }
