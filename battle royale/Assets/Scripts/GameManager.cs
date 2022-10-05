@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviourPun
     public string playerPrefabLocation;
     public PlayerController[] players;
     public Transform[] spawnPoints;
+    // public PlayerCondition[] playerConditions;
     public int alivePlayers;
 
     private int playersInGame;
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviourPun
     void Start()
     {
         players = new PlayerController[PhotonNetwork.PlayerList.Length];
+        // playerConditions = new PlayerCondition[PhotonNetwork.PlayerList.Length];
         alivePlayers = players.Length;
 
         photonView.RPC("ImInGame", RpcTarget.AllBuffered);

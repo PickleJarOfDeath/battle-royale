@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
     public float maxY;
 
     [Header("Spectator")]
-    public float spectatprMoveSpeed;
+    public float spectatorMoveSpeed;
 
     private float rotX;
     private float rotY;
@@ -38,8 +38,8 @@ public class CameraController : MonoBehaviour
             transform.rotation = Quaternion.Euler(-rotY, rotX, 0);
 
             float x = Input.GetAxis("Horizontal");
-            float y = Input.GetAxis("Vertical");
-            float z = 0;
+            float z = Input.GetAxis("Vertical");
+            float y = 0;
 
             if (Input.GetKey(KeyCode.E))
             {
@@ -51,12 +51,12 @@ public class CameraController : MonoBehaviour
             }
 
             Vector3 dir = transform.right * x + transform.up * y + transform.forward * z;
-            transform.position += dir * spectatprMoveSpeed * Time.deltaTime;
+            transform.position += dir * spectatorMoveSpeed * Time.deltaTime;
         }
         else
         {
             transform.localRotation = Quaternion.Euler(-rotY, 0, 0);
-            transform.parent.rotation = Quaternion.Euler(0, rotX, 0);
+            transform.parent.rotation = Quaternion.Euler(transform.rotation.x, rotX, 0);
         }
     }
 

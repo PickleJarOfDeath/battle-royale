@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -18,13 +19,14 @@ public class PlayerController : MonoBehaviourPun
     public int kills;
     public bool dead;
 
-    private bool flashingDamage;
+    public bool flashingDamage;
 
     [Header("Components")]
     public Rigidbody rig;
     public Player photonPlayer;
     public PlayerWeapon weapon;
     public MeshRenderer mr;
+    // public PlayerCondition playerCondition;
 
 
     [PunRPC]
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviourPun
         if (!photonView.IsMine)
         {
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
+            GetComponentInChildren<PostProcessVolume>().gameObject.SetActive(false);
             rig.isKinematic = true;
         }
         else
@@ -82,6 +85,8 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
+    [PunRPC]
+
     public void TakeDamage(int attackerId, int damage)
     {
         if (dead)
@@ -121,6 +126,8 @@ public class PlayerController : MonoBehaviourPun
             flashingDamage = false;
         }
     }
+
+    [PunRPC]
 
     void Die()
     {
