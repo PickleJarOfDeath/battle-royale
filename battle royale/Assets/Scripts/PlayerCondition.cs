@@ -52,11 +52,11 @@ public class PlayerCondition : MonoBehaviour
     {
         playerState = 1f - (player.curHP * 0.01f);
 
-        if (player.flashingDamage == true)
+        if (player.takingDamage == true)
         {
             grainIntensity.intensity.value = 1f;
             grainIntensity.lumContrib.value = 0;
-            vignetteIntensity.intensity.value = 1f;
+            vignetteIntensity.intensity.value = 0.625f;
             chromIntensity.intensity.value = 1f;
         }
         else
@@ -65,7 +65,7 @@ public class PlayerCondition : MonoBehaviour
             {
                 grainIntensity.intensity.value = playerState;
                 grainIntensity.lumContrib.value = 1f;
-                vignetteIntensity.intensity.value = playerState * 0.625f;
+                vignetteIntensity.intensity.value = playerState * 0.5f;
                 chromIntensity.intensity.value = playerState;
             }
             else

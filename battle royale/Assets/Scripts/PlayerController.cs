@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviourPun
     public int kills;
     public bool dead;
 
-    public bool flashingDamage;
+    private bool flashingDamage;
+    public bool takingDamage;
 
     [Header("Components")]
     public Rigidbody rig;
@@ -101,8 +102,29 @@ public class PlayerController : MonoBehaviourPun
 
         GameUI.instance.UpdateHealthBar();
 
+        TakeDamageVis();
+
         if (curHP <= 0)
             photonView.RPC("Die", RpcTarget.All);
+
+
+    }
+
+    void TakeDamageVis()
+    {
+        if (takingDamage)
+            return;
+
+        StartCoroutine(TakingDamageCoroutine());
+
+        IEnumerator TakingDamageCoroutine()
+        {
+            takingDamage = true;
+            yield return new WaitForSeconds(0.05f);
+            flashingDamage = false;
+        }
+
+        takingDamage = false;
     }
 
     [PunRPC]

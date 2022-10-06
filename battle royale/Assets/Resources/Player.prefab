@@ -184,6 +184,7 @@ MonoBehaviour:
   kills: 0
   dead: 0
   flashingDamage: 0
+  takingDamage: 0
   rig: {fileID: 5577767145116855483}
   weapon: {fileID: 2676464937403644455}
   mr: {fileID: 5577767145116855481}
