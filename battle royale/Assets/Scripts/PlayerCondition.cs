@@ -7,7 +7,6 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerCondition : MonoBehaviour
 {
-    public GameObject volume;
     PostProcessVolume grainVolume;
     PostProcessVolume vignetteVolume;
     PostProcessVolume chromVolume;
@@ -24,7 +23,7 @@ public class PlayerCondition : MonoBehaviour
     void Awake()
     {
         instance = this;
-        player = GetComponentInParent<PlayerController>();
+        player = GetComponent<PlayerController>();
     }
 
     // Start is called before the first frame update
@@ -53,34 +52,31 @@ public class PlayerCondition : MonoBehaviour
         chromVolume = PostProcessManager.instance.QuickVolume(gameObject.layer, 100f, chromIntensity);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateCondition()
     {
         playerState = 1f - (player.curHP * 0.01f);
 
-        if (player.takingDamage == true)
+        if (playerState != 0f)
         {
-            grainIntensity.intensity.value = 1f;
-            grainIntensity.lumContrib.value = 0;
-            vignetteIntensity.intensity.value = 0.625f;
-            chromIntensity.intensity.value = 1f;
+            grainIntensity.intensity.value = playerState;
+            grainIntensity.lumContrib.value = 1f;
+            vignetteIntensity.intensity.value = playerState * 0.5f;
+            chromIntensity.intensity.value = playerState;
         }
         else
         {
-            if (playerState != 0f)
-            {
-                grainIntensity.intensity.value = playerState;
-                grainIntensity.lumContrib.value = 1f;
-                vignetteIntensity.intensity.value = playerState * 0.5f;
-                chromIntensity.intensity.value = playerState;
-            }
-            else
-            {
-                grainIntensity.intensity.value = 0f;
-                grainIntensity.lumContrib.value = 1f;
-                vignetteIntensity.intensity.value = 0f;
-                chromIntensity.intensity.value = 0f;
-            }
+            grainIntensity.intensity.value = 0f;
+            grainIntensity.lumContrib.value = 1f;
+            vignetteIntensity.intensity.value = 0f;
+            chromIntensity.intensity.value = 0f;
         }
+    }
+
+    public void FlashHit()
+    {
+        grainIntensity.intensity.value = 1f;
+        grainIntensity.lumContrib.value = 0;
+        vignetteIntensity.intensity.value = 0.625f;
+        chromIntensity.intensity.value = 1f;
     }
 }

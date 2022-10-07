@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviourPun
     public int kills;
     public bool dead;
 
+    public float healthCondition;
+
     private bool flashingDamage;
     public bool takingDamage;
 
@@ -27,7 +29,7 @@ public class PlayerController : MonoBehaviourPun
     public Player photonPlayer;
     public PlayerWeapon weapon;
     public MeshRenderer mr;
-    // public PlayerCondition playerCondition;
+    public PlayerCondition playerCondition;
 
 
     [PunRPC]
@@ -102,6 +104,8 @@ public class PlayerController : MonoBehaviourPun
 
         GameUI.instance.UpdateHealthBar();
 
+        PlayerCondition.instance.UpdateCondition();
+
         TakeDamageVis();
 
         if (curHP <= 0)
@@ -119,9 +123,9 @@ public class PlayerController : MonoBehaviourPun
 
         IEnumerator TakingDamageCoroutine()
         {
-            takingDamage = true;
+            PlayerCondition.instance.FlashHit();
             yield return new WaitForSeconds(0.05f);
-            flashingDamage = false;
+            PlayerCondition.instance.UpdateCondition();
         }
 
         takingDamage = false;
@@ -187,5 +191,6 @@ public class PlayerController : MonoBehaviourPun
         curHP += Mathf.Clamp( curHP + amountToHeal, 0, maxHP);
 
         GameUI.instance.UpdateHealthBar();
+        PlayerCondition.instance.UpdateCondition();
     }
 }
