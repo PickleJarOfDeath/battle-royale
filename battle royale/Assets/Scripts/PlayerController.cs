@@ -124,11 +124,12 @@ public class PlayerController : MonoBehaviourPun
         IEnumerator TakingDamageCoroutine()
         {
             PlayerCondition.instance.FlashHit();
-            yield return new WaitForSeconds(0.05f);
-            PlayerCondition.instance.UpdateCondition();
-        }
 
-        takingDamage = false;
+            yield return new WaitForSeconds(0.05f);
+
+            PlayerCondition.instance.UpdateCondition();
+            takingDamage = false;
+        }
     }
 
     [PunRPC]
