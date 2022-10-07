@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviourPun
         if (!photonView.IsMine)
         {
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
-            GetComponentInChildren<PostProcessVolume>().gameObject.SetActive(false);
+            // GetComponentInChildren<PostProcessVolume>().gameObject.SetActive(false);
             rig.isKinematic = true;
         }
         else

@@ -52,16 +52,4 @@ public class GameUI : MonoBehaviour
         winBackground.gameObject.SetActive(true);
         winText.text = winnerName + " wins";
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

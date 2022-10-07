@@ -7,18 +7,24 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerCondition : MonoBehaviour
 {
+    public GameObject volume;
     PostProcessVolume grainVolume;
     PostProcessVolume vignetteVolume;
     PostProcessVolume chromVolume;
+
     Grain grainIntensity;
     Vignette vignetteIntensity;
     ChromaticAberration chromIntensity;
+
     private PlayerController player;
+    public static PlayerCondition instance;
+
     public float playerState;
 
     void Awake()
     {
-        player = GetComponent<PlayerController>();
+        instance = this;
+        player = GetComponentInParent<PlayerController>();
     }
 
     // Start is called before the first frame update

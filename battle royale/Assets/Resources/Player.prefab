@@ -183,7 +183,6 @@ MonoBehaviour:
   maxHP: 100
   kills: 0
   dead: 0
-  flashingDamage: 0
   takingDamage: 0
   rig: {fileID: 5577767145116855483}
   weapon: {fileID: 2676464937403644455}
@@ -219,6 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b8b5d6a6073a248abce68fa18b2d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  volume: {fileID: 1492220605}
   playerState: 0
 --- !u!33 &5577767145116855480
 MeshFilter:
